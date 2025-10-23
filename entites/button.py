@@ -38,6 +38,6 @@ class Button():
             if self.args:
                 for action in self.args:
                     action()
-            else:
-                return True
+            # else:
+            #     return True
 

@@ -1,6 +1,7 @@
 import math
 import random
 import pygame
+import sys
 from entites import (Tank,
                      Game,
                      Wall,
@@ -36,18 +37,6 @@ explosion_sound = pygame.mixer.Sound("sound/destroy.wav")
 fontUI = pygame.font.Font(None, 30)
 fontBig = pygame.font.Font(None, 70)
 fontTitle = pygame.font.Font(None, 140)
-
-# walls = pygame.sprite.Group()
-# enemys = pygame.sprite.Group()
-# explosions = pygame.sprite.Group()
-#
-# enemy = Enemy(battle_arena, 155, 0)
-# enemys.add(enemy)
-#
-# enemys_background_location = [(x, y) for y in range(30, 421, 40) for x in range(820, 921, 40)]
-# enemy_tank = pygame.image.load("image/enemy.png")
-# enemy_image = pygame.transform.rotozoom(enemy_tank, 180, 30 / 32)
-# enemys_background = [(enemy_image, item) for item in enemys_background_location]
 
 users_background_location = [(x, y) for y in range(680, 731, 40) for x in range(820, 921, 40)]
 user_tank = pygame.image.load("image/users_tank.png")
@@ -155,7 +144,14 @@ def game_loop():
             if event.type == pygame.QUIT:
                 pygame.mixer.music.stop()
                 game.running = False
+
+                # pygame.quit()
+                # sys.exit()
             elif event.type == pygame.KEYDOWN:
+
+                # if event.key == pygame.K_ESCAPE:
+                #     game.running = False
+
                 if event.key == pygame.K_SPACE and len(game.bullets) < 5:
                     bullet = Bullet(battle_arena, my_tank, shot_sound)
                     game.bullets.append(bullet)
@@ -296,6 +292,7 @@ def game_loop():
             pygame.mixer.music.play()
 
         if game.timer == 5100 and game.is_gameover:
+            game.is_gameover = False
             game_menu()
 
 
@@ -303,29 +300,27 @@ def game_loop():
         # 3.3 оновлення дисплея
         pygame.display.flip()
         clock.tick(FPS)
-
+    return
 
 def clearing():
-    # game.timer = 0
-    # game.score = 0
-    # game.stage = 1
     game.bullets.clear()
     game.bullets_enemy.clear()
     game.users_background = [(user_image, item) for item in users_background_location]
-    # game.running = True
-    # # game.menu_running = False
     game.__init__()
 
 def game_continue():
-    # game.menu_running = False
     game.running = True
     game_loop()
 
+def game_exit():
+    pygame.quit()
+    sys.exit()
+
+
 
 button_start = Button(screen, 200, "NEW GAME", clearing, game_loop)
-# button_continue = Button(screen, 320, "Continue", game_loop)
-# # button_continue = Button(screen, 320, "Continue", game_continue)
-button_exit = Button(screen, 440, "EXIT")
+# button_continue = Button(screen, 320, "Continue", game_continue)
+button_exit = Button(screen, 440, "EXIT", game_exit)
 
 
 def game_menu():
@@ -338,6 +333,9 @@ def game_menu():
             # button_continue.mouse_event(event)
             if button_exit.mouse_event(event):
                 running = False
+
+        if not pygame.display.get_init():
+            return
 
         screen.fill((16, 69, 79))
         screen.blit(background_menu, (0, 0))
@@ -354,10 +352,11 @@ def game_menu():
         clock.tick(FPS)
 
 
-# game_loop()
-game_menu()
+if __name__ == "__main__":
+    # game_loop()
+    game_menu()
 
-with open("hiscore.txt", 'w') as f:
-    f.write(str(game.hiscore))
+    with open("hiscore.txt", 'w') as f:
+        f.write(str(game.hiscore))
 
-pygame.quit()
+    pygame.quit()
