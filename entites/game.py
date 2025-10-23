@@ -11,6 +11,7 @@ class Game():
         self.max_tanks_quantity = 5
         self.max_detection_distance = 400
         self.running = True
+        self.show_continue = False
         self.menu_running = False
         self.is_gameover = False
         self.paused_music = False
