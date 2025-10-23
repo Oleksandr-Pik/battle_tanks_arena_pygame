@@ -99,6 +99,11 @@ def draw_UI(text, x, y):
     screen.blit(textUI, rect)
 
 
+def write_hiscore_to_file():
+    with open("hiscore.txt", 'w') as f:
+        f.write(str(game.hiscore))
+
+
 # def enemy_tank_control(my_tank):
 #     for enemy in game.enemys:
 #         if my_tank.image_rect.y - 16 <= enemy.rect.y <= my_tank.image_rect.y + 16:
@@ -317,6 +322,7 @@ def game_loop():
         if game.timer == 5100 and game.is_gameover:
             game.is_gameover = False
             game.show_continue = False
+            write_hiscore_to_file()
             return
 
         pygame.display.flip()
@@ -378,6 +384,4 @@ def game_menu():
 
 if __name__ == "__main__":
     game_menu()
-    with open("hiscore.txt", 'w') as f:
-        f.write(str(game.hiscore))
     pygame.quit()
